@@ -62,7 +62,7 @@ import Foundation
     */
     init(matrix: Array<Array<Bool>>, graphNodes: Array<AnyObject>) {
         self.graphNodes = graphNodes;
-        self.adjList = AdjacencyList.getAdjacencyList(matrix);
+        self.adjList = AdjacencyList.getAdjacencyList(adjacencyMatrix: matrix);
     }
     
     /**
@@ -73,25 +73,25 @@ import Foundation
     */
     func getElementaryCycles() -> Array<Array<AnyObject>> {
         self.cycles = Array<Array<AnyObject>>()
-        self.blocked = [Bool](count:self.adjList.count, repeatedValue:false)
-        self.B = [Array<Int>](count: self.adjList.count, repeatedValue: [])
+        self.blocked = [Bool](repeating:false, count:self.adjList.count)
+        self.B = [Array<Int>](repeating: [], count: self.adjList.count)
         self.stack = [Int]()
         
         let sccs = StrongConnectedComponents(adjList: self.adjList)
         var s = 0
         
         while(true) {
-            let sccResult = sccs.getAdjacencyList(s)
+            let sccResult = sccs.getAdjacencyList(node: s)
             if let result = sccResult {
                 let scc = result.adjList
                 s = result.lowestNodeId
-                for var j = 0; j<scc.count; ++j {
+                for j in 0..<scc.count{
                     self.blocked![j] = false
                     self.B![j] = [Int]()
                 }
                 
-                findCycles(s, s: s, adjList: scc)
-                s++
+                findCycles(v: s, s: s, adjList: scc)
+                s = S + 1
             }else {
                 break
             }
@@ -115,28 +115,28 @@ import Foundation
         self.stack?.append(v)
         self.blocked![v] = true;
     
-        for var i = 0; i < adjList[v].count; ++i {
+        for i in 0..<adjList[v].count {
             let w = adjList[v][i]
             // found cycle
             if (w == s) {
 				var cycle = Array<AnyObject>()
-				for var j = 0; j < self.stack!.count; ++j {
+				for j in 0..<self.stack!.count {
                     let index = self.stack![j]
                     cycle.append(self.graphNodes[index])
 				}
 				self.cycles?.append(cycle);
 				f = true;
             } else if (!self.blocked![w]) {
-                if (findCycles(w, s: s, adjList: adjList)) {
+                if (findCycles(v: w, s: s, adjList: adjList)) {
                     f = true;
 				}
             }
         }
     
         if (f) {
-            unblock(v)
+            unblock(node: v)
         } else {
-            for var i = 0; i < adjList[v].count; ++i {
+            for i in 0..<adjList[v].count {
 				let w = adjList[v][i]
 				if (!self.B![w].contains(v)) {
                     self.B![w].append(v)
@@ -144,9 +144,9 @@ import Foundation
             }
         }
     
-        let indexToRemove = self.stack!.indexOf(v)
+        let indexToRemove = self.stack!.index(of: v)
         if let index = indexToRemove {
-            self.stack!.removeAtIndex(index)
+            self.stack!.remove(at: index)
         }
         return f
     }
@@ -161,9 +161,9 @@ import Foundation
         var Bnode = self.B![node]
         while (Bnode.count > 0) {
             let w = Bnode.first!
-            Bnode.removeAtIndex(0)
+            Bnode.remove(at:0)
             if (self.blocked![w]) {
-				self.unblock(w)
+                self.unblock(node: w)
             }
         }
     }

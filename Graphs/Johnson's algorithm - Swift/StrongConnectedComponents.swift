@@ -78,25 +78,25 @@ import Foundation
      * connected component; null, if no such component exists
      */
     func getAdjacencyList(node:Int) -> SCCResult? {
-        self.visited = [Bool](count: self.adjListOriginal.count, repeatedValue: false)
-        self.lowlink = [Int](count: self.adjListOriginal.count, repeatedValue: 0)
-        self.number = [Int](count: self.adjListOriginal.count, repeatedValue: 0)
+        self.visited = [Bool](repeating: false, count: self.adjListOriginal.count)
+        self.lowlink = [Int](repeating: 0, count: self.adjListOriginal.count)
+        self.number = [Int](repeating: 0, count: self.adjListOriginal.count)
         self.stack = Array<Int>()
         self.currentSCCs = Array<Array<Int>>()
         
-        makeAdjListSubgraph(node)
+        makeAdjListSubgraph(node: node)
         
-        for var i = node; i<self.adjListOriginal.count; ++i {
+        for i in node..<self.adjListOriginal.count {
             if (!self.visited![i]) {
-                getStrongConnectedComponents(i)
+                getStrongConnectedComponents(root: i)
                 
                 let nodes = getLowestIdComponent()
-                if let n = nodes where (!n.contains(node) && !n.contains(node+1)) {
-                    return getAdjacencyList(node+1)
+                if let n = nodes, (!n.contains(node) && !n.contains(node+1)) {
+                    return getAdjacencyList(node: node+1)
                 } else {
-                    let adjacencyList = getAdjList(nodes)
+                    let adjacencyList = getAdjList(nodes: nodes)
                     if let ad = adjacencyList {
-                        for var j = 0; j<self.adjListOriginal.count; ++j {
+                        for j in 0..<self.adjListOriginal.count {
                             if (ad[j].count > 0){
                                 return SCCResult(adjList: ad, lowestNodeId: j)
                             }
@@ -117,19 +117,19 @@ import Foundation
      * @param node Node with lowest index in the subgraph
      */
     func makeAdjListSubgraph(node: Int) {
-        self.adjList = Array<Array<Int>>(count:self.adjListOriginal.count, repeatedValue:[])
+        self.adjList = Array<Array<Int>>(repeating:[], count:self.adjListOriginal.count)
         
-        for var i = node; i < self.adjList?.count; ++i {
+        for i in node..<self.adjList!.count {
             var successors = Array<Int>()
-            for var j = 0; j < self.adjListOriginal[i].count; ++j {
+            for j in 0..<self.adjListOriginal[i].count {
                 if self.adjListOriginal[i][j] >= node {
                     successors.append(self.adjListOriginal[i][j]);
                 }
             }
             
             if (successors.count > 0) {
-                self.adjList![i] = [Int](count:successors.count, repeatedValue:0)
-                for var j = 0; j < successors.count; ++j {
+                self.adjList![i] = [Int](repeating:0, count:successors.count)
+                for j in 0..<successors.count {
                     let succ = successors[j]
                     self.adjList![i][j] = succ
                 }
@@ -144,11 +144,11 @@ import Foundation
      * @return Vector::Integer of the scc containing the lowest nodenumber
      */
     func getLowestIdComponent() -> Array<Int>? {
-        var min = self.adjList?.count
+        var min = self.adjList!.count
         var currScc : Array<Int>?;
-        for var i = 0; i < self.currentSCCs?.count; ++i {
+        for i in 0..<self.currentSCCs!.count {
             let scc = self.currentSCCs![i]
-            for var j = 0; j < scc.count; ++j {
+            for j in 0..<scc.count {
                 let node = scc[j]
                 if (node < min) {
                     currScc = scc
@@ -167,13 +167,13 @@ import Foundation
     func getAdjList(nodes: Array<Int>?) -> Array<Array<Int>>?{
         var lowestIdAdjacencyList : Array<Array<Int>>?
         if let n = nodes {
-            lowestIdAdjacencyList =  [Array<Int>](count: self.adjList!.count, repeatedValue: [])
-            for var i = 0; i < lowestIdAdjacencyList!.count; ++i {
+            lowestIdAdjacencyList =  [Array<Int>](repeating: [], count: self.adjList!.count)
+            for i in 0..<lowestIdAdjacencyList!.count {
                 lowestIdAdjacencyList![i] = [Int]()
             }
-            for var i = 0; i < n.count; ++i {
+            for i in 0..<n.count{
                 let node = n[i]
-                for var j = 0; j < self.adjList![node].count; ++j {
+                for j in 0..<self.adjList![node].count {
                     let succ = self.adjList![node][j]
                     if n.contains(succ) {
                         lowestIdAdjacencyList![node].append(succ)
@@ -190,16 +190,16 @@ import Foundation
      * @param root node to start from.
      */
     func getStrongConnectedComponents(root: Int) {
-        self.sccCounter++
+        self.sccCounter = self.sccCounter + 1
         self.lowlink![root] = self.sccCounter
         self.number![root] = self.sccCounter
         self.visited![root] = true
         self.stack!.append(root)
         
-        for var i = 0; i < self.adjList![root].count; ++i {
+        for i in 0..<self.adjList![root].count {
             let w = self.adjList![root][i];
             if (!self.visited![w]) {
-                self.getStrongConnectedComponents(w)
+                self.getStrongConnectedComponents(root: w)
                 self.lowlink![root] = min(lowlink![root], lowlink![w])
             } else if (self.number![w] < self.number![root]) {
                 if (self.stack!.contains(w)) {
@@ -214,7 +214,7 @@ import Foundation
             var scc = [Int]()
             repeat {
                 next = self.stack!.last!
-                self.stack!.removeAtIndex(stack!.count - 1)
+                self.stack!.remove(at:stack!.count - 1)
                 scc.append(next)
             } while (self.number![next] > self.number![root])
             // simple scc's with just one node will not be added
@@ -225,10 +225,10 @@ import Foundation
     }
     
     class func test() {
-        var nodes = [String](count: 10, repeatedValue: "")
-        var adjMatrix = [[Bool]](count: 10, repeatedValue: [Bool](count: 10, repeatedValue: false));
+        var nodes = [String](repeating: "", count: 10)
+        var adjMatrix = [[Bool]](repeating: [Bool](repeating: false, count: 10), count: 10);
         
-        for var i = 0; i < 10; ++i {
+        for i in 0..<10 {
             nodes[i] = "Node " + String(i);
         }
         
@@ -245,12 +245,12 @@ import Foundation
         adjMatrix[8][6] = true;
         adjMatrix[6][1] = true;
         
-        let ecs = ElementaryCyclesSearch(matrix: adjMatrix, graphNodes: nodes)
+        let ecs = ElementaryCyclesSearch(matrix: adjMatrix, graphNodes: nodes as Array<AnyObject>)
         let cycles = ecs.getElementaryCycles()
-        for var i = 0; i<cycles.count; ++i {
+        for i in 0..<cycles.count {
             let cycle = cycles[i]
             var representation = ""
-            for var j = 0; j<cycle.count; ++j {
+            for j in 0..<cycle.count {
                 let node = cycle[j]
                 if j < cycle.count - 1 {
                     representation += node as! String + " -> "

@@ -17,7 +17,7 @@ import Foundation
         self.adjList = adjList
         self.lowestNodeId = lowestNodeId
         nodeIDsOfSCC = []
-        for var index = lowestNodeId; index < adjList.count; ++index {
+        for index in lowestNodeId..<adjList.count {
             if (adjList[index].count > 0) {
                 self.nodeIDsOfSCC.insert(index)
             }
