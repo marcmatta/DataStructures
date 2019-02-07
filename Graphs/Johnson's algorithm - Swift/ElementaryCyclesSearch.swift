@@ -91,7 +91,7 @@ import Foundation
                 }
                 
                 findCycles(v: s, s: s, adjList: scc)
-                s = S + 1
+                s = s + 1
             }else {
                 break
             }

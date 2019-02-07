@@ -38,7 +38,7 @@ import Foundation
                 }
             }
             
-            list[i] = [Int](count:v.count, repeatedValue: 0)
+            list[i] = [Int](repeating: 0, count:v.count)
             for j in 0..<v.count {
                 let in_ = v[j]
                 list[i][j] = in_
