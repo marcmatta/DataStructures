@@ -90,7 +90,7 @@ import Foundation
                     self.B![j] = [Int]()
                 }
                 
-                findCycles(v: s, s: s, adjList: scc)
+                let _ = findCycles(v: s, s: s, adjList: scc)
                 s = s + 1
             }else {
                 break
