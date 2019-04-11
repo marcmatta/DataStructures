@@ -144,7 +144,7 @@ import Foundation
             }
         }
     
-        let indexToRemove = self.stack!.index(of: v)
+        let indexToRemove = self.stack!.firstIndex(of: v)
         if let index = indexToRemove {
             self.stack!.remove(at: index)
         }
