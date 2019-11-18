@@ -251,11 +251,12 @@ import Foundation
             let cycle = cycles[i]
             var representation = ""
             for j in 0..<cycle.count {
-                let node = cycle[j]
-                if j < cycle.count - 1 {
-                    representation += node as! String + " -> "
-                }else {
-                    representation += node as! String
+                if let node = cycle[j] as? String {
+                    if j < cycle.count - 1 {
+                        representation += node + " -> "
+                    }else {
+                        representation += node
+                    }
                 }
             }
             print(representation + "\n")
