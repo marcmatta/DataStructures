@@ -60,7 +60,7 @@ import Foundation
     * build sets of the elementary cycles containing the objects of the original
     * graph-representation
     */
-    init(matrix: Array<Array<Bool>>, graphNodes: Array<AnyObject>) {
+    open init(matrix: Array<Array<Bool>>, graphNodes: Array<AnyObject>) {
         self.graphNodes = graphNodes;
         self.adjList = AdjacencyList.getAdjacencyList(adjacencyMatrix: matrix);
     }
@@ -71,7 +71,7 @@ import Foundation
     *
     * @return List::List::Object with the Lists of the elementary cycles.
     */
-    func getElementaryCycles() -> Array<Array<AnyObject>> {
+    open func getElementaryCycles() -> Array<Array<AnyObject>> {
         self.cycles = Array<Array<AnyObject>>()
         self.blocked = [Bool](repeating:false, count:self.adjList.count)
         self.B = [Array<Int>](repeating: [], count: self.adjList.count)
