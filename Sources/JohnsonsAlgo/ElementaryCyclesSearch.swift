@@ -33,7 +33,7 @@ import Foundation
 *
 */
 
-@objc public class ElementaryCyclesSearch : NSObject {
+@objc open class ElementaryCyclesSearch : NSObject {
     /** List of cycles */
     private var cycles : Array<Array<AnyObject>>?
     
