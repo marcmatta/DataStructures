@@ -28,18 +28,18 @@ import Foundation
      * that are direct successornodes of the node.
      */
     class func getAdjacencyList( adjacencyMatrix: Array<Array<Bool>>) -> Array<Array<Int>> {
-        var list = [Array<Int>](count: adjacencyMatrix.count, repeatedValue: [])
+        var list = [Array<Int>](repeating: [], count: adjacencyMatrix.count)
         
-        for var i = 0; i < adjacencyMatrix.count; ++i {
+        for i in 0..<adjacencyMatrix.count {
             var v = [Int]()
-            for var j = 0; j < adjacencyMatrix[i].count; ++j {
+            for j in 0..<adjacencyMatrix[i].count{
                 if (adjacencyMatrix[i][j]) {
                     v.append(j)
                 }
             }
             
-            list[i] = [Int](count:v.count, repeatedValue: 0)
-            for var j = 0; j < v.count; ++j {
+            list[i] = [Int](repeating: 0, count:v.count)
+            for j in 0..<v.count {
                 let in_ = v[j]
                 list[i][j] = in_
             }
