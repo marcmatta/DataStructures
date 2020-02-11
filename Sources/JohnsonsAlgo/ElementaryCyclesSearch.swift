@@ -60,7 +60,7 @@ import Foundation
     * build sets of the elementary cycles containing the objects of the original
     * graph-representation
     */
-    open init(matrix: Array<Array<Bool>>, graphNodes: Array<AnyObject>) {
+    public init(matrix: Array<Array<Bool>>, graphNodes: Array<AnyObject>) {
         self.graphNodes = graphNodes;
         self.adjList = AdjacencyList.getAdjacencyList(adjacencyMatrix: matrix);
     }
