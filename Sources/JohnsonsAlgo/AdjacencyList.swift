@@ -16,7 +16,7 @@ import Foundation
  * @version 1.0, 26.08.2006
  *
  */
-@objc public class AdjacencyList : NSObject {
+public class AdjacencyList {
     /**
      * Calculates a adjacency-list for a given array of an adjacency-matrix.
      *

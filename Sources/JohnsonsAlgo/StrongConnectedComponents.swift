@@ -32,7 +32,7 @@ import Foundation
  * @version 1.1, 22.03.2009
  *
  */
-@objc public class StrongConnectedComponents :NSObject {
+public class StrongConnectedComponents {
     /** Adjacency-list of original graph */
     private var adjListOriginal : Array<Array<Int>>
     

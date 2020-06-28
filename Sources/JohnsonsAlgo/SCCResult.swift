@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc public class SCCResult : NSObject{
+public class SCCResult {
     var nodeIDsOfSCC : Set<Int>
     var adjList : Array<Array<Int>>
     var lowestNodeId : Int
