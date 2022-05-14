@@ -8,6 +8,9 @@
 
 import Foundation
 
+public typealias AdjacencyMatrix = Array<Array<Bool>>
+//public typealias AdjacencyList = Array<Array<Int>>
+
 /**
  * Calculates the adjacency-list for a given adjacency-matrix.
  *

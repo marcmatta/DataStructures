@@ -8,6 +8,13 @@
 
 import Foundation
 
+public typealias Matrix<Element> = Array<Array<Element>>
+
+public enum GraphErrors: Error {
+    case algoIssue
+    case missingObject
+}
+
 /**
 * Searchs all elementary cycles in a given directed graph. The implementation
 * is independent from the concrete objects that represent the graphnodes, it
@@ -71,7 +78,7 @@ open class ElementaryCyclesSearch<Element> {
     *
     * @return List::List::Object with the Lists of the elementary cycles.
     */
-    open func getElementaryCycles() -> Array<Array<Element>> {
+    open func getElementaryCycles() throws -> Array<Array<Element>> {
         self.cycles = Array<Array<Element>>()
         self.blocked = [Bool](repeating:false, count:self.adjList.count)
         self.B = [Array<Int>](repeating: [], count: self.adjList.count)
@@ -90,7 +97,7 @@ open class ElementaryCyclesSearch<Element> {
                     self.B![j] = [Int]()
                 }
                 
-                let _ = findCycles(v: s, s: s, adjList: scc)
+                let _ = try findCycles(v: s, s: s, adjList: scc)
                 s = s + 1
             }else {
                 break
@@ -110,8 +117,13 @@ open class ElementaryCyclesSearch<Element> {
     * connected component s is part of.
     * @return true, if cycle found; false otherwise
     */
-    func findCycles(v: Int, s: Int, adjList:Array<Array<Int>> ) -> Bool {
+    func findCycles(v: Int, s: Int, adjList:Array<Array<Int>> ) throws -> Bool {
         var f = false;
+        
+                
+        if stack?.contains(v) ?? false {
+            throw GraphErrors.algoIssue
+        }
         self.stack?.append(v)
         self.blocked![v] = true;
     
@@ -127,7 +139,7 @@ open class ElementaryCyclesSearch<Element> {
 				self.cycles?.append(cycle);
 				f = true;
             } else if (!self.blocked![w]) {
-                if (findCycles(v: w, s: s, adjList: adjList)) {
+                if (try findCycles(v: w, s: s, adjList: adjList)) {
                     f = true;
 				}
             }

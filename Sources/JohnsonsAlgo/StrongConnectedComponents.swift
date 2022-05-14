@@ -224,7 +224,7 @@ public class StrongConnectedComponents {
         }
     }
     
-    class func test() {
+    class func test() throws {
         var nodes = [String](repeating: "", count: 10)
         var adjMatrix = [[Bool]](repeating: [Bool](repeating: false, count: 10), count: 10);
         
@@ -246,7 +246,7 @@ public class StrongConnectedComponents {
         adjMatrix[6][1] = true;
         
         let ecs = ElementaryCyclesSearch(matrix: adjMatrix, graphNodes: nodes as Array<AnyObject>)
-        let cycles = ecs.getElementaryCycles()
+        let cycles = try ecs.getElementaryCycles()
         for i in 0..<cycles.count {
             let cycle = cycles[i]
             var representation = ""
