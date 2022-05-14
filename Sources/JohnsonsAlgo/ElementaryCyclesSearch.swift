@@ -79,6 +79,9 @@ open class ElementaryCyclesSearch<Element> {
     * @return List::List::Object with the Lists of the elementary cycles.
     */
     open func getElementaryCycles() throws -> Array<Array<Element>> {
+        if let result = cycles {
+            return result
+        }
         self.cycles = Array<Array<Element>>()
         self.blocked = [Bool](repeating:false, count:self.adjList.count)
         self.B = [Array<Int>](repeating: [], count: self.adjList.count)
@@ -122,6 +125,7 @@ open class ElementaryCyclesSearch<Element> {
         
                 
         if stack?.contains(v) ?? false {
+            self.cycles = Array<Array<Element>>()
             throw GraphErrors.algoIssue
         }
         self.stack?.append(v)
